@@ -17,16 +17,18 @@ class MidFx {
 
     async UpdateDataSignal(data_equity) {
         const DataLast = await DataEquity.findAll({ where: { balance: data_equity.data_balance }, order: [['id', 'DESC']], limit: 1 });
+        const percentageDD = (parseFloat(data_equity.data_balance) - parseFloat(data_equity.data_equity))/parseFloat(data_equity.data_balance)*100
         if (DataLast.length === 0) {
             let dataInsert = {
                 balance: data_equity.data_balance,
                 equity: data_equity.data_equity,
-                free_margin: data_equity.data_free_margin
+                free_margin: data_equity.data_free_margin,
+                drawdown: percentageDD
             }
             await DataEquity.create(dataInsert)
         } else {
             if (parseFloat(DataLast[0].equity) > parseFloat(data_equity.data_equity)) {
-                const updateSignal = await DataEquity.update({ equity: data_equity.data_equity, free_margin: data_equity.data_free_margin }, { where: { id: DataLast[0].id } });
+                const updateSignal = await DataEquity.update({ equity: data_equity.data_equity, free_margin: data_equity.data_free_margin, drawdown: percentageDD }, { where: { id: DataLast[0].id } });
             }
         }
         return true;
