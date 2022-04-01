@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>KickEnglish</title>
+</head>
+<body>
+<div class="wrapper" style="background:#f3f3f3;padding: 15px 0;">
+<div class="page-wrap" style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:13px;color:#242a33;width: 631px;margin:0 auto;font-weight: normal;">
+    <div class="header" style="background:#61016a;height: 70px;text-align: center;padding: 10px;">
+        <img src="https://kickcrm.net/images/logo-kickenglish-3.png" width="130px" alt="">
+    </div>
+    <div class="main-content" style="background:#fff;padding:20px;font-size:14px;">
+        <ul style="list-style:none;margin:0;padding:0;">
+            <li style="font-weight:bold;margin-bottom:15px;">Đã có đơn hàng mới được tạo, thông tin đơn hàng là: </li>
+            <br/>
+            
+            <% if (customer) { %>
+               <li style="margin-bottom:15px;"><strong>THÔNG TIN ĐƠN HÀNG</strong></li>
+               <li style="margin-bottom:15px;"><strong>Tên gói: </strong> <%= packageName %></li>
+               <li style="margin-bottom:15px;"><strong>Mã đơn hàng: </strong><%= code %></li>
+               <li style="margin-bottom:15px;"><strong>Tổng giá: </strong><%= total_price %></li>
+               <li style="margin-bottom:15px;"><strong>Tên khách hàng: </strong><%= customer.name %></li>
+               <li style="margin-bottom:15px;"><strong>Email: </strong><%= customer.email %></li>
+               <li style="margin-bottom:15px;"><strong>Số điện thoại: </strong><%= customer.mobile %></li>
+           <% } %>
+             <br/>
+
+			<li style="margin-bottom:15px;"><i>Đây là email từ hệ thống, vui lòng không phản hồi/reply lại email này. Xin cảm ơn!</i></li>
+	   </ul>
+    </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+1. Lấy list các đồng coin cần phải check từ table: coin
+- token
+- networkId
+- exchangeId
+- amount2Test
+- circleCheck
+- aliasCoin ( định danh COIN, vì mỗi COIN có nhiều token ở nhiều network khác nhau )
+
+2. Insert vào bảng data_results sao cho mỗi đồng coin vs mỗi option check giá là 1 bản ghi 
+( hiện tại đang hard code mỗi đồng ở mỗi sàn, mạng, option check giá là 1 bản ghi )
+* Điều kiện check update / insert:
+- aliasCoin 
+- optionCheck
+
+* Tùy vào luồng Buy / Sell sẽ update các trường Buy / Sell trong bảng data_results tương ứng
+
+* Logic statusBuy/SellCircle
+- crawl fail or success đều update +1 statusCircle
+- Đến khi data_results.statusCircle = coin.circleCheck thì:
++ trigger tự động chạy để insert bản ghi đó sang bảng temp_final_results hoặc queue
+
+3. 
+* Bảng temp_final_results có các status:
+- buy
+- checkingSell
+- checkingSellDone
+* 2' sẽ quét bảng temp_final_results 1 lần để lấy ra các bản ghi cần check Sell ( status = buy )
+- group by: exchangeId, networkId
+- Lấy ra xong chuyển status = checkingSell
+- Check Sell xong ( khi temp_final_results.statusCircle = coin.circleCheck )thì:
+ + chuyển status = checkingSellDone
+ + trigger tự động chạy để insert bản ghi đó sang bảng final_results và xóa bản ghi đó
