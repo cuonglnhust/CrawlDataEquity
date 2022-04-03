@@ -40,6 +40,11 @@ const attributes = {
         allowNull: true,
         defaultValue: null
     },
+    drawdown: {
+        type: DataTypes.DOUBLE,
+        allowNull: true,
+        defaultValue: null
+    },
     datetime: {
         type: DataTypes.STRING(255),
         allowNull: true,
