@@ -16,19 +16,20 @@ var excel = require('excel4node');
 class MidFx {
 
     async UpdateDataSignal(data_equity) {
-        const DataLast = await DataEquity.findAll({ where: { balance: data_equity.data_balance }, order: [['id', 'DESC']], limit: 1 });
+        const DataLast = await DataEquity.findAll({ where: { balance: data_equity.data_balance, source_signal_name: data_equity.source_signal_name }, order: [['id', 'DESC']], limit: 1 });
         const percentageDD = (parseFloat(data_equity.data_balance) - parseFloat(data_equity.data_equity))/parseFloat(data_equity.data_balance)*100
         if (DataLast.length === 0) {
             let dataInsert = {
                 balance: data_equity.data_balance,
                 equity: data_equity.data_equity,
                 free_margin: data_equity.data_free_margin,
-                drawdown: percentageDD
+                drawdown: percentageDD,
+                source_signal_name: data_equity.source_signal_name
             }
             await DataEquity.create(dataInsert)
         } else {
             if (parseFloat(DataLast[0].equity) > parseFloat(data_equity.data_equity)) {
-                const updateSignal = await DataEquity.update({ equity: data_equity.data_equity, free_margin: data_equity.data_free_margin, drawdown: percentageDD }, { where: { id: DataLast[0].id } });
+                const updateSignal = await DataEquity.update({ equity: data_equity.data_equity, free_margin: data_equity.data_free_margin, drawdown: percentageDD, source_signal_name: data_equity.source_signal_name }, { where: { id: DataLast[0].id } });
             }
         }
         return true;
@@ -56,7 +57,9 @@ class MidFx {
         worksheet.cell(1, 2).string('BALANCE').style(style);
         worksheet.cell(1, 3).string('EQUITY').style(style);
         worksheet.cell(1, 4).string('FREE MARGIN').style(style);
-        worksheet.cell(1, 5).string('DATE').style(style);
+        worksheet.cell(1, 5).string('DRAW DOWN').style(style);
+        worksheet.cell(1, 6).string('DATE').style(style);
+        worksheet.cell(1, 7).string('SOURCE SIGNAL NAME').style(style);
 
         const DataExport = await DataEquity.findAll();
         let row = 2
@@ -71,7 +74,9 @@ class MidFx {
             worksheet.cell(row, 2).string(data.balance).style(style2);
             worksheet.cell(row, 3).string(data.equity).style(style2);
             worksheet.cell(row, 4).string(data.free_margin).style(style2);
-            worksheet.cell(row, 5).string(splitDate[1]).style(style2);
+            worksheet.cell(row, 5).string(data.drawdown+ '').style(style2);
+            worksheet.cell(row, 6).string(splitDate[1]).style(style2);
+            worksheet.cell(row, 7).string(data.source_signal_name).style(style2);
             row++
             
         }

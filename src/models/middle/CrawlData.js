@@ -1,5 +1,6 @@
 
 const getDataSignal = async () => {
+    let source_signal_name = "ong_ban_sai_gon";
     var rows = document.querySelectorAll('table')[3].children[1];
     let ListSignal = [];
     let list_data_row_trade = [];
@@ -50,7 +51,8 @@ const getDataSignal = async () => {
     const dataInsert = {
         data_balance: dataBalance,
         data_equity: dataEquity,
-        data_free_margin: dataFreeMargin
+        data_free_margin: dataFreeMargin,
+        source_signal_name: source_signal_name
     }
     let data_res = await fetch("http://localhost:3299/api/fx/update_signal", {
         method: 'POST',

@@ -50,6 +50,11 @@ const attributes = {
         allowNull: true,
         defaultValue: null
     },
+    source_signal_name: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        defaultValue: null
+    },
     createdAt: {
         type: DataTypes.DATE,
         allowNull: true
